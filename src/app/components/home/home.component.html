@@ -1,4 +1,4 @@
-<div class="header">
+<!-- <div class="header">
   <div class="tw-text-24-px tw-font-600">Open Books Library</div>
   <div class="search-button">
     <mat-icon class="tw-mt-16-px" aria-label="Search Icon">search</mat-icon>
@@ -8,16 +8,184 @@
       type="text"
       placeholder="Search Books"
       class="tw-border-0 tw-bg-inherit"
-    >
+    />
   </div>
 </div>
 <div class="tw-flex tw-flex-row tw-m-24-px">
   <section class="trending-subjects">
     <div class="tw-font-600 tw-text-24-px">Trending Subjects</div>
     <ul class="tw-list-none tw-pl-0">
-      <li class="tw-text-16-px tw-cursor-pointer tw-p-12-px" *ngFor="let subject of trendingSubjects" routerLink="/trending-subject/{{ subject.name }}">
+      <li
+        class="tw-text-16-px tw-cursor-pointer tw-p-12-px"
+        *ngFor="let subject of trendingSubjects"
+        routerLink="/trending-subject/{{ subject.name }}"
+      >
         {{ subject.name }}
       </li>
     </ul>
   </section>
+</div> -->
+
+<!-- <div class="container-fluid">
+  <div class="row">
+    <div class="col-3" id="header">
+      <div class="tw-flex tw-flex-row tw-m-24-px">
+        <section class="trending-subjects">
+          <div class="tw-font-600 tw-text-24-px">Trending Subjects</div>
+          <ul class="tw-list-none tw-pl-0">
+            <li
+              class="tw-text-16-px tw-cursor-pointer tw-p-12-px"
+              *ngFor="let subject of trendingSubjects"
+              routerLink="/trending-subject/{{ subject.name }}"
+            >
+              {{ subject.name }}
+            </li>
+          </ul>
+        </section>
+      </div>
+    </div>
+    <div class="col-9">Hello</div>
+  </div>
+</div> -->
+<div class="row" style="height: 100%">
+  <div class="col-md-2">
+    <div
+      class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark"
+      style="width: 280px; height: 100%"
+    >
+      <hr />
+      <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+          <a href="#" class="nav-link active" aria-current="page">
+            <fa-icon [icon]="faHouse" class="me-3"></fa-icon>
+            Home
+          </a>
+        </li>
+        <li>
+          <a href="#" class="nav-link text-white">
+            <fa-icon [icon]="glass" class="me-3"></fa-icon>
+            Search
+          </a>
+        </li>
+        <li
+          class="nav-link text-white"
+          *ngFor="let subject of trendingSubjects"
+        >
+          <a routerLink="/trending-subject/{{ subject.name }}">{{
+            subject.name
+          }}</a>
+        </li>
+      </ul>
+      <hr />
+    </div>
+  </div>
+  <div class="col-md-10">
+    <div class="card-body d-flex justify-content-center">
+      <div class="search-wrapper" [class.active]="isActive">
+        <div class="input-holder" style="max-width: 750px">
+          <input
+            type="text"
+            label="search"
+            placeholder="Search"
+            [(ngModel)]="search"
+            class="search-input"
+            (ngModelChange)="getSearchData()"
+          />
+          <button class="search-icon" (click)="isActive = true">
+            <span></span>
+          </button>
+        </div>
+        <button
+          class="close"
+          (click)="search = ''; getSearchData()"
+          style="left: 300px"
+        ></button>
+      </div>
+    </div>
+    <div class="text-center" *ngIf="searchData.length == 0">
+      <h3>Nothing to Show</h3>
+    </div>
+    <div class="card main-card m-5" *ngIf="searchData.length != 0">
+      <div class="table-responsive">
+        <table
+          class="align-middle mb-0 table table-borderless table-hover table-striped"
+        >
+          <thead>
+            <tr class="text-center">
+              <th scope="col">#</th>
+              <th scope="col">Title And Sub Title</th>
+              <th scope="col">Author</th>
+              <th scope="col">Year Of Publication</th>
+            </tr>
+          </thead>
+          <tbody class="text-center" *ngIf="searchData">
+            <tr *ngFor="let search of searchData; let i = index">
+              <th scope="row">{{ i + 1 }}</th>
+              <td>{{ search.title }}</td>
+              <td>{{ search.author_name }}</td>
+              <td *ngIf="search.publish_year.length < 5">
+                <p>{{ search.publish_year }}</p>
+              </td>
+              <td *ngIf="search.publish_year.length > 5">
+                <button
+                  class="btn btn-primary"
+                  (click)="open(content, search.publish_year)"
+                >
+                  View
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="d-block p-4 card-footer">
+          <div class="d-flex w-100 justify-content-between">
+            <ngb-pagination
+              [collectionSize]="size"
+              [(page)]="page"
+              [pageSize]="pageSize"
+              [boundaryLinks]="true"
+              [maxSize]="5"
+              (pageChange)="getSearchData()"
+            ></ngb-pagination>
+
+            <div class="text-right" *ngIf="size">
+              <span class="mr-2">Rows per page</span>
+              <select
+                [(ngModel)]="pageSize"
+                (ngModelChange)="handlePageSizeChange()"
+              >
+                <option *ngFor="let size of pageSizes" [value]="size">
+                  {{ size }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Publish Years</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <p *ngFor="let d of data" class="text-center">{{ d }}</p>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-dark"
+      (click)="modal.close('Save click')"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>

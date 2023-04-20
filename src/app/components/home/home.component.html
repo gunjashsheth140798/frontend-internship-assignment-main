@@ -123,16 +123,19 @@
               <th scope="row">{{ i + 1 }}</th>
               <td>{{ search.title }}</td>
               <td>{{ search.author_name }}</td>
-              <td *ngIf="search.publish_year.length < 5">
+              <td *ngIf="search.publish_year && search.publish_year.length < 5">
                 <p>{{ search.publish_year }}</p>
               </td>
-              <td *ngIf="search.publish_year.length > 5">
+              <td *ngIf="search.publish_year && search.publish_year.length > 5">
                 <button
                   class="btn btn-primary"
                   (click)="open(content, search.publish_year)"
                 >
                   View
                 </button>
+              </td>
+              <td *ngIf="!search.publish_year">
+                <p>No Data Available</p>
               </td>
             </tr>
           </tbody>
